@@ -1,0 +1,36 @@
+---
+- name: Copy the enduro systemd service file
+  template:
+    src: "{{ item }}"
+    dest: /etc/systemd/system/enduro.service
+    owner: root
+    group: root
+    mode: 0644
+  with_first_found:
+    - templates/{{ inventory_hostname }}/enduro.service.j2
+    - templates/enduro.service.j2
+  notify: restart enduro
+
+- name: Copy the enduro config file
+  template:
+    src: "{{ item }}"
+    dest: /etc/enduro.toml
+    owner: root
+    group: root
+    mode: 0644
+  with_first_found:
+    - templates/{{ inventory_hostname }}/enduro.toml.j2
+    - templates/enduro.toml.j2
+  notify: restart enduro
+
+- name: "Create watched.filesystem path directories"
+  become: yes
+  file:
+    path: "{{ item.watched_path }}"
+    state: "directory"
+    owner: "{{ enduro_system_user }}"
+    group: "{{ enduro_system_group }}"
+    mode: 0755
+  loop: "{{ enduro_filesystem_pipelines }}"
+  when:
+    - enduro_filesystem_pipelines|length > 0 

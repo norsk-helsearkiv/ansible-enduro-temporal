@@ -1,0 +1,118 @@
+---
+enduro_version: "0.38.2"
+enduro_listen_debug_address: "127.0.0.1:9001"
+enduro_listen_api_address: "127.0.0.1:9000"
+enduro_binary_install_dir: "/usr/local/bin"
+enduro_system_user: "enduro"
+enduro_system_group: "enduro"
+enduro_systemd_after_services: "network.target temporal.service"
+enduro_systemd_wantedby_services: "multi-user.target"
+enduro_temporal_namespace: "default" # By default only temporal-system namespace exists
+enduro_temporal_namespace_retention_period: 60 # In days
+enduro_debug_verbosity: 2
+enduro_debug_enabled: "true"
+enduro_listen_temporal_address: "127.0.0.1:7233"
+enduro_api_debug_enabled: "false"
+
+# Enduro database
+enduro_db_user: "enduro"
+enduro_db_pass: "enduro%123"
+enduro_db_host: "localhost"
+enduro_db_name: "enduro"
+enduro_db_port: "3306"
+
+# Enduro pipelines
+enduro_filesystem_pipelines: []
+
+#enduro_filesystem_pipelines:
+#  - name: "pipeline1"
+#    baseURL: "http://pipeline1.archivematica.org"
+#    user: "test"
+#    key: "test"
+#    transfer_dir: "/transfers/pipeline1"
+#    processing_dir: ""
+#    processing_config: "automated"
+#    # transferLocationID = "88f6b517-c0cc-411b-8abf-79544ce96f54" #Optional
+#    storageServiceURL: "http://test:test@ss.archivematica.org:8000"
+#    capacity: 3
+#    retryDeadline: "10m"
+#    transferDeadline: "24h"
+#    watched_name: "watched-pipeline1"
+#    watched_path: "/var/archivematica/watched"
+#    watched_inotify: "false"
+#    watched_stripTopLevelDir: "false"
+#    watched_retentionPeriod: "0s"
+#    watched_ignore: "(^.gitkeep)|(^*.mft)$"
+
+enduro_minio_pipelines: []
+
+#enduro_minio_pipelines:
+#  - name: "pipeline1"
+#    baseURL: "http://pipeline1.archivematica.org"
+#    user: "test"
+#    key: "test"
+#    transfer_dir: "/transfers/pipeline1"
+#    processing_dir: ""
+#    processing_config: "automated"
+#    # transferLocationID = "88f6b517-c0cc-411b-8abf-79544ce96f54" # Optional
+#    storageServiceURL: "http://test:test@ss.archivematica.org:8000"
+#    capacity: 3
+#    retryDeadline: "10m"
+#    transferDeadline: "24h"
+#    watched_name: "watched-pipeline1"
+#    watched_redisAddress: "redis://127.0.0.1:7470"
+#    watched_redisList: "minio-events"
+#    watched_endpoint: "http://127.0.0.1:7460"
+#    watched_pathStyle: "true"
+#    watched_key: "minio"
+#    watched_secret: "minio123"
+#    watched_region: "us-west-1"
+#    watched_bucket: "sips"
+#    watched_retentionPeriod: "10s"
+#    watched_stripTopLevelDir: "true"
+
+# tctl variables
+tctl_version: "1.18.0"
+tctl_binary_install_dir: "/usr/local/bin" 
+
+# Temporal internal variables
+temporal_version: "1.21.1"
+temporal_env: "temporal" # the systemd will call /etc/temporal/config/{{ temporal_env }}.yaml file
+temporal_systemd_after_services: "{% if ansible_os_family in ['RedHat','Rocky'] %}network.target mysqld.service{% else %}network.target mysql.service{% endif %}"
+temporal_systemd_wantedby_services: "enduro.service"
+temporal_binary_install_dir: "/usr/local/bin"
+temporal_schema_install_dir: "/usr/share/temporal"
+temporal_schema_plugin_path: "{% if temporal_mysql_plugin == 'mysql' %}{{ temporal_schema_install_dir }}/schema/mysql/v57{% elif temporal_mysql_plugin == 'mysql8' %}{{ temporal_schema_install_dir }}/schema/mysql/v8{% endif %}" # IF not using mysql or mysql8 plugin, set this path in your group or host vars 
+temporal_system_user: "temporal"
+temporal_system_group: "temporal"
+temporal_mysql_plugin: "mysql" # USe "mysql8" for MySQL 8
+
+temporal_service_pprof_port: "7936"
+temporal_broadcast_address: "127.0.0.1"
+temporal_rpc_address: "localhost"
+temporal_service_prometheus_listenaddress: "127.0.0.1:7401"
+temporal_service_frontend_grpc_port: "7233"
+temporal_service_frontend_membership_port: "6933"
+temporal_service_matching_grpc_port: "7235"
+temporal_service_matching_membership_port: "6935"
+temporal_service_history_grpc_port: "7234"
+temporal_service_history_membership_port: "6934"
+temporal_service_worker_grpc_port: "7239"
+temporal_service_worker_membership_port: "6939"
+
+temporal_archival_history_state: "enabled"
+temporal_archival_history_URI: "file:///tmp/temporal_archival/development"
+
+# Temporal database
+temporal_db_user: "temporal"
+temporal_db_pass: "temporal123P$"
+temporal_db_host: "localhost"
+temporal_db_name: "temporal"
+temporal_db_port: "3306"
+
+# Visibility database
+temporal_visibility_db_user: "visibility"
+temporal_visibility_db_pass: "visibility123P$"
+temporal_visibility_db_host: "localhost"
+temporal_visibility_db_name: "visibility"
+temporal_visibility_db_port: "3306"

@@ -1,0 +1,84 @@
+---
+- name: Create the temporal group
+  group:
+    name: "{{ temporal_system_group }}"
+    state: present
+    system: true
+
+- name: Create the temporal user
+  user:
+    name: "{{ temporal_system_user }}"
+    groups: "{{ temporal_system_group }}"
+    append: true
+    shell: /usr/sbin/nologin
+    system: true
+    createhome: true
+    home: /var/lib/temporal
+
+- name: Download temporal binary to local folder
+  become: false
+  get_url:
+    url: "https://github.com/temporalio/temporal/releases/download/v{{ temporal_version }}/temporal_{{ temporal_version }}_linux_amd64.tar.gz"
+    dest: "/tmp/temporal_{{ temporal_version }}_linux_amd64.tar.gz"
+    checksum: "sha256:{{ temporal_checksum_binaries }}"
+    mode: '0644'
+  register: _download_binary
+  until: _download_binary is succeeded
+  retries: 5
+  delay: 2
+  delegate_to: localhost
+  check_mode: false
+
+- name: "Create tmp temporal directories"
+  become: false
+  file:
+    path: "/tmp/temporal_{{ temporal_version }}_linux_amd64"
+    state: directory
+  delegate_to: localhost
+  check_mode: false
+
+- name: Unpack temporal binary
+  become: false
+  unarchive:
+    src: "/tmp/temporal_{{ temporal_version }}_linux_amd64.tar.gz"
+    dest: "/tmp/temporal_{{ temporal_version }}_linux_amd64"
+    creates: "/tmp/temporal_{{ temporal_version }}_linux_amd64/temporal-server"
+  delegate_to: localhost
+  check_mode: false
+
+- name: Propagate temporal binaries
+  copy:
+    src: "/tmp/temporal_{{ temporal_version }}_linux_amd64/{{ item }}"
+    dest: "{{ temporal_binary_install_dir }}/{{ item }}"
+    mode: 0755
+    owner: root
+    group: root
+  notify: restart temporal
+  loop:
+    - temporal-server
+    - temporal-cassandra-tool
+    - temporal-sql-tool
+  when: not ansible_check_mode
+
+- name: Download temporal sources to local folder (directly on enduro server)
+  become: false
+  get_url:
+    url: "https://github.com/temporalio/temporal/archive/refs/tags/v{{ temporal_version }}.tar.gz"
+    dest: "/tmp/temporal_{{ temporal_version }}_src.tar.gz"
+    mode: '0644'
+  register: _download_src
+  until: _download_src is succeeded
+  retries: 5
+  delay: 2
+  check_mode: false
+
+- name: Unpack temporal src (only schema dir)
+  become: true
+  unarchive:
+    src: "/tmp/temporal_{{ temporal_version }}_src.tar.gz"
+    dest: "{{ temporal_schema_install_dir }}"
+    remote_src: "yes"
+    extra_opts:
+      - "--strip-components=1"
+      - "temporal-{{ temporal_version }}/schema"
+  check_mode: false

@@ -1,0 +1,105 @@
+log:
+  stdout: true
+  level: info
+
+persistence:
+  defaultStore: mysql-default
+  visibilityStore: mysql-visibility
+  numHistoryShards: 4
+  datastores:
+    mysql-default:
+      sql:
+        pluginName: "{{ temporal_mysql_plugin }}"
+        databaseName: "{{ temporal_db_name }}"
+        connectAddr: "{{ temporal_db_host }}:{{ temporal_db_port }}"
+        connectProtocol: "tcp"
+        user: "{{ temporal_db_user  }}"
+        password: "{{ temporal_db_pass }}"
+        maxConns: 20
+        maxIdleConns: 20
+        maxConnLifetime: "1h"
+    mysql-visibility:
+      sql:
+        pluginName: "{{  temporal_mysql_plugin }}"
+        databaseName: "{{ temporal_visibility_db_name }}"
+        connectAddr: "{{ temporal_visibility_db_host }}:{{ temporal_visibility_db_port }}"
+        connectProtocol: "tcp"
+        user: "{{ temporal_visibility_db_user }}"
+        password: "{{ temporal_visibility_db_pass }}"
+        maxConns: 2
+        maxIdleConns: 2
+        maxConnLifetime: "1h"
+
+global:
+  membership:
+    maxJoinDuration: 30s
+    broadcastAddress: "{{ temporal_broadcast_address }}"
+  pprof:
+    port: {{ temporal_service_pprof_port | int }}
+  metrics:
+    prometheus:
+#      # specify framework to use new approach for initializing metrics and/or use opentelemetry
+#      framework: "opentelemetry"
+      framework: "tally"
+      timerType: "histogram"
+      listenAddress: "{{ temporal_service_prometheus_listenaddress }}"
+
+services:
+  frontend:
+    rpc:
+      grpcPort: {{ temporal_service_frontend_grpc_port | int }}
+      membershipPort: {{ temporal_service_frontend_membership_port | int }}
+      bindOnLocalHost: true
+
+  matching:
+    rpc:
+      grpcPort: {{ temporal_service_matching_grpc_port | int }}
+      membershipPort: {{ temporal_service_matching_membership_port | int }}
+      bindOnLocalHost: true
+
+  history:
+    rpc:
+      grpcPort: {{ temporal_service_history_grpc_port | int }}
+      membershipPort: {{ temporal_service_history_membership_port | int }}
+      bindOnLocalHost: true
+
+  worker:
+    rpc:
+      grpcPort: {{ temporal_service_worker_grpc_port | int }}
+      membershipPort: {{ temporal_service_worker_membership_port | int }}
+      bindOnLocalHost: true
+
+clusterMetadata:
+  enableGlobalNamespace: false
+  failoverVersionIncrement: 10
+  masterClusterName: "active"
+  currentClusterName: "active"
+  clusterInformation:
+    active:
+      enabled: true
+      initialFailoverVersion: 1
+      rpcName: "frontend"
+      rpcAddress: "{{ temporal_rpc_address }}:{{ temporal_service_frontend_grpc_port }}"
+
+dcRedirectionPolicy:
+  policy: "noop"
+
+archival:
+  history:
+    state: "{{ temporal_archival_history_state }}"
+    enableRead: true
+    provider:
+      filestore:
+        fileMode: "0666"
+        dirMode: "0766"
+  visibility:
+    state: "disabled"
+    enableRead: false
+
+namespaceDefaults:
+  archival:
+    history:
+      state: "{{ temporal_archival_history_state }}"
+      URI: "{{ temporal_archival_history_URI }}"
+    visibility:
+      state: "disabled"

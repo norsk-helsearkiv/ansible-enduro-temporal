@@ -1,0 +1,12 @@
+[Unit]
+Description=Temporal
+After={{ temporal_systemd_after_services }}
+
+[Service]
+Type=simple
+Restart=on-failure
+User={{ temporal_system_user }}
+ExecStart={{ temporal_binary_install_dir }}/temporal-server --root=/etc/temporal --env={{ temporal_env }} start --services=frontend,matching,history,worker
+
+[Install]
+WantedBy={{ temporal_systemd_wantedby_services }}

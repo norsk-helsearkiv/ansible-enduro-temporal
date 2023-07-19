@@ -1,0 +1,94 @@
+verbosity = "{{ enduro_debug_verbosity }}"
+debug = "{{  enduro_debug_enabled }}"
+debugListen = "{{ enduro_listen_debug_address }}"
+
+[temporal]
+namespace = "{{ enduro_temporal_namespace }}"
+address = "{{ enduro_listen_temporal_address }}"
+
+[api]
+listen = "{{ enduro_listen_api_address }}"
+debug = "{{ enduro_api_debug_enabled }}"
+
+[database]
+dsn = "{{ enduro_db_user }}:{{ enduro_db_pass }}@tcp({{ enduro_db_host }}:{{ enduro_db_port | int }})/{{ enduro_db_name }}"
+
+{% if enduro_filesystem_pipelines|length > 0 %}
+{% for pipeline in enduro_filesystem_pipelines %}
+[[watcher.filesystem]]
+name = "{{ pipeline.watched_name }}"
+path = "{{ pipeline.watched_path }}"
+inotify = "{{ pipeline.watched_inotify }}"
+pipeline = "{{ pipeline.name }}"
+stripTopLevelDir = "{{ pipeline.watched_stripTopLevelDir }}"
+retentionPeriod = "{{ pipeline.watched_retentionPeriod }}"
+ignore = "{{ pipeline.watched_ignore }}"
+
+[[pipeline]]
+name = "{{ pipeline.name }}"
+baseURL = "{{ pipeline.baseURL }}"
+user = "{{ pipeline.user }}"
+key = "{{ pipeline.key }}"
+transferDir = "{{ pipeline.transfer_dir }}"
+processingDir = "{{ pipeline.processing_dir }}"
+processingConfig = "{{ pipeline.processing_config }}"
+{% if pipeline.transferLocationID is defined %}
+transferLocationID = "{{ pipeline.transferLocationID }}"
+{% endif %}
+storageServiceURL = "{{ pipeline.storageServiceURL }}"
+capacity = "{{ pipeline.capacity }}"
+retryDeadline = "{{ pipeline.retryDeadline }}"
+transferDeadline = "{{ pipeline.transferDeadline }}"
+
+{% endfor %}
+{% endif %}
+
+{% if enduro_minio_pipelines|length > 0 %}
+{% for pipeline in enduro_minio_pipelines %}
+[[watcher.filesystem]]
+name = "{{ pipeline.watched_name }}"
+redisAddress = "{{ pipeline.watched_redisAddress }}"
+redisList = "{{ pipeline.watched_redisList }}"
+endpoint = "{{ pipeline.watched_endpoint }}"
+pathStyle = "{{ pipeline.watched_pathStyle }}"
+key = "{{ pipeline.watched_key }}"
+secret = "{{ pipeline.watched_secret }}"
+region = "{{ pipeline.watched_region }}"
+bucket = "{{ pipeline.watched_bucket }}"
+pipeline = ""{{ pipeline.name }}"
+retentionPeriod = "{{ pipeline.watched_retentionPeriod }}"
+stripTopLevelDir = "{{ pipeline.watched_stripTopLevelDir }}"
+
+[[pipeline]]
+name = "{{ pipeline.name }}"
+baseURL = "{{ pipeline.baseURL }}"
+user = "{{ pipeline.user }}"
+key = "{{ pipeline.key }}"
+transferDir = "{{ pipeline.transfer_dir }}"
+processingDir = "{{ pipeline.processing_dir }}"
+processingConfig = "{{ pipeline.processing_config }}"
+{% if pipeline.transferLocationID is defined %}
+transferLocationID = "{{ pipeline.transferLocationID }}"
+{% endif %}
+storageServiceURL = "{{ pipeline.storageServiceURL }}"
+capacity = "{{ pipeline.capacity }}"
+retryDeadline = "{{ pipeline.retryDeadline }}"
+transferDeadline = "{{ pipeline.transferDeadline }}"
+
+{% endfor %}
+{% endif %}
+
+[[hooks."hari"]]
+mock = true
+disabled = true
+#baseURL = "" # E.g.: "https://192.168.1.50:8080/api"
+baseURL = "http://tr-pvl-hari-001/api"
+
+
+[[hooks."prod"]]
+receiptPath = "/staging/storage-receipts"
+disabled = true
+
+[validation]
+checksumsCheckEnabled = false
+

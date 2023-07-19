@@ -1,0 +1,16 @@
+[Unit]
+Description=Enduro
+After={{ enduro_systemd_after_services }}
+
+[Service]
+Type=simple
+Restart=on-failure
+User={{ enduro_system_user }}
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=EnduroStdout
+SyslogFacility=local1
+ExecStart={{ enduro_binary_install_dir }}/enduro --config /etc/enduro.toml
+
+[Install]
+WantedBy={{ enduro_systemd_wantedby_services }}

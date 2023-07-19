@@ -1,0 +1,79 @@
+---
+- name: Copy the temporal systemd service file
+  template:
+    src: "{{ item }}"
+    dest: /etc/systemd/system/temporal.service
+    owner: root
+    group: root
+    mode: 0644
+  with_first_found:
+    - templates/{{ inventory_hostname }}/temporal.service.j2
+    - templates/temporal.service.j2
+
+- name: "Create temporal config directory"
+  become: yes
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+  loop:
+    - "/etc/temporal"
+    - "/etc/temporal/config"
+  check_mode: false
+
+- name: Copy the temporal config file
+  template:
+    src: "{{ item }}"
+    dest: /etc/temporal/config/{{ temporal_env }}.yaml
+    owner: root
+    group: root
+    mode: 0644
+  with_first_found:
+    - templates/{{ inventory_hostname }}/temporal.yaml.j2
+    - templates/temporal.yaml.j2
+
+- name: "Setup database schemas"
+  become: "yes"
+  shell: "{{ item }}"
+  with_items:
+    - "{{ temporal_binary_install_dir }}/temporal-sql-tool --db {{ temporal_db_name }} --ep {{ temporal_db_host }} --user {{ temporal_db_user }} --password {{ temporal_db_pass }} setup-schema -v 0.1"
+    - "{{ temporal_binary_install_dir }}/temporal-sql-tool --db {{ temporal_visibility_db_name }} --ep {{ temporal_visibility_db_host }} --user {{ temporal_visibility_db_user }} --password {{ temporal_visibility_db_pass }} setup-schema -v 0.1"
+  no_log: true
+  tags:
+    - "temporal-setup-schema"
+
+- name: "Run temporal migrations"
+  become: "yes"
+  shell: "{{ item }}"
+  with_items:
+    - "{{ temporal_binary_install_dir }}/temporal-sql-tool --db {{ temporal_db_name }} --ep {{ temporal_db_host }} --user {{ temporal_db_user }} --password {{ temporal_db_pass }} update-schema -d {{ temporal_schema_plugin_path }}/temporal/versioned/"
+    - "{{ temporal_binary_install_dir }}/temporal-sql-tool --db {{ temporal_visibility_db_name }} --ep {{ temporal_visibility_db_host }} --user {{ temporal_visibility_db_user }} --password {{ temporal_visibility_db_pass }} update-schema -d {{ temporal_schema_plugin_path }}/visibility/versioned/"
+  no_log: true
+  tags:
+    - "temporal-run-migrations"
+
+- name: Start temporal service to register namespace
+  become: true
+  systemd:
+    daemon_reload: true
+    name: "temporal"
+    state: "restarted"
+  tags:
+    - "temporal-namespace"
+
+# By default only temporal-system namespace exists
+- name: "Ensure {{ enduro_temporal_namespace }} namespace exists"
+  become: "yes"
+  shell: "{{ tctl_binary_install_dir }}/tctl --namespace {{ enduro_temporal_namespace }} namespace register"
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  tags:
+    - "temporal-namespace"
+
+- name: "Configure retention period in {{ enduro_temporal_namespace }} namespace"
+  become: "yes"
+  shell: "{{ tctl_binary_install_dir }}/tctl --namespace {{ enduro_temporal_namespace }} namespace update --rd {{ enduro_temporal_namespace_retention_period }}"
+  tags:
+    - "temporal-retention-period"

@@ -1,0 +1,14 @@
+---
+- name: restart enduro
+  become: true
+  systemd:
+    daemon_reload: true
+    name: enduro
+    state: restarted
+
+- name: restart temporal
+  become: true
+  systemd:
+    daemon_reload: true
+    name: temporal
+    state: restarted

@@ -1,0 +1,22 @@
+---
+
+- name: "Discover temporal latest version"
+  set_fact:
+    temporal_version: "{{ (lookup('url', 'https://api.github.com/repos/temporalio/temporal/releases/latest', headers=_github_api_headers,
+                            split_lines=False) | from_json).get('tag_name') | replace('v', '') }}"
+  run_once: true
+  until: temporal_version is version('0.0.0', '>=')
+  retries: 10
+  when:
+    - temporal_version == "latest"
+
+
+- name: "Get Temporal checksum list from github"
+  set_fact:
+    _checksums: "{{ lookup('url', 'https://github.com/temporalio/temporal/releases/download/v' + temporal_version + '/checksums.txt', wantlist=True) | list }}"
+
+- name: "Get Temporal checksum for linux amd64 binaries"
+  set_fact:
+    temporal_checksum_binaries: "{{ item.split(' ')[0] }}"
+  with_items: "{{ _checksums }}"
+  when:  "('linux_amd64.tar.gz') in item"
