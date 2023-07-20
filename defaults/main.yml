@@ -1,5 +1,5 @@
 ---
-enduro_version: "0.38.2"
+enduro_version: "0.39.0"
 enduro_listen_debug_address: "127.0.0.1:9001"
 enduro_listen_api_address: "127.0.0.1:9000"
 enduro_binary_install_dir: "/usr/local/bin"
@@ -43,6 +43,7 @@ enduro_filesystem_pipelines: []
 #    watched_stripTopLevelDir: "false"
 #    watched_retentionPeriod: "0s"
 #    watched_ignore: "(^.gitkeep)|(^*.mft)$"
+#    watched_rejectDuplicates: "false"
 
 enduro_minio_pipelines: []
 
@@ -70,6 +71,7 @@ enduro_minio_pipelines: []
 #    watched_bucket: "sips"
 #    watched_retentionPeriod: "10s"
 #    watched_stripTopLevelDir: "true"
+#    watched_rejectDuplicates: "false"
 
 # tctl variables
 tctl_version: "1.18.0"

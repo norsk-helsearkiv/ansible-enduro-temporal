@@ -22,6 +22,7 @@ inotify = "{{ pipeline.watched_inotify }}"
 pipeline = "{{ pipeline.name }}"
 stripTopLevelDir = "{{ pipeline.watched_stripTopLevelDir }}"
 retentionPeriod = "{{ pipeline.watched_retentionPeriod }}"
+rejectDuplicates = "{{ pipeline.watched_rejectDuplicates }}"
 ignore = "{{ pipeline.watched_ignore }}"
 
 [[pipeline]]
@@ -58,6 +59,7 @@ bucket = "{{ pipeline.watched_bucket }}"
 pipeline = ""{{ pipeline.name }}"
 retentionPeriod = "{{ pipeline.watched_retentionPeriod }}"
 stripTopLevelDir = "{{ pipeline.watched_stripTopLevelDir }}"
+rejectDuplicates = "{{ pipeline.watched_rejectDuplicates }}"
 
 [[pipeline]]
 name = "{{ pipeline.name }}"
