@@ -72,6 +72,13 @@
   delay: 2
   check_mode: false
 
+- name: Create temporal schema dir
+  become: true
+  file:
+    path: "{{ temporal_schema_install_dir }}"
+    state: directory
+  check_mode: false
+
 - name: Unpack temporal src (only schema dir)
   become: true
   unarchive:
