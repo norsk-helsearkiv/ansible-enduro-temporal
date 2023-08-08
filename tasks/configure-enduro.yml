@@ -31,6 +31,7 @@
     owner: "{{ enduro_system_user }}"
     group: "{{ enduro_system_group }}"
     mode: 0755
-  loop: "{{ enduro_filesystem_pipelines }}"
+  loop: "{{ enduro_filesystem_pipelines }}"
   when:
-    - enduro_filesystem_pipelines|length > 0 
+    - enduro_filesystem_pipelines|length > 0
+    - enduro_create_watched_filesystem_dir|bool

@@ -13,6 +13,8 @@ enduro_debug_verbosity: 2
 enduro_debug_enabled: "true"
 enduro_listen_temporal_address: "127.0.0.1:7233"
 enduro_api_debug_enabled: "false"
+enduro_create_watched_filesystem_dir: "true"
+enduro_create_system_user: "true"
 
 # Enduro database
 enduro_db_user: "enduro"
