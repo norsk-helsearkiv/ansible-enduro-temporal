@@ -46,7 +46,7 @@ transferDeadline = "{{ pipeline.transferDeadline }}"
 
 {% if enduro_minio_pipelines|length > 0 %}
 {% for pipeline in enduro_minio_pipelines %}
-[[watcher.filesystem]]
+[[watcher.minio]]
 name = "{{ pipeline.watched_name }}"
 redisAddress = "{{ pipeline.watched_redisAddress }}"
 redisList = "{{ pipeline.watched_redisList }}"
