@@ -1,5 +1,5 @@
 ---
-enduro_version: "0.39.0"
+enduro_version: "0.41.1"
 enduro_listen_debug_address: "127.0.0.1:9001"
 enduro_listen_api_address: "127.0.0.1:9000"
 enduro_binary_install_dir: "/usr/local/bin"
@@ -14,6 +14,7 @@ enduro_debug_enabled: "true"
 enduro_listen_temporal_address: "127.0.0.1:7233"
 enduro_api_debug_enabled: "false"
 enduro_create_watched_filesystem_dir: "true"
+enduro_create_pipeline_transfer_dir: "true"
 enduro_create_system_user: "true"
 
 # Enduro database
