@@ -17,6 +17,9 @@ enduro_create_watched_filesystem_dir: "true"
 enduro_create_pipeline_transfer_dir: "true"
 enduro_create_system_user: "true"
 
+enduro_install_rpm: False
+enduro_rpm_url: "https://packages.archivematica.org/1.15.x/rocky9-extras/enduro-0.41.1-1.el9.x86_64.rpm"
+
 # Enduro database
 enduro_db_user: "enduro"
 enduro_db_pass: "enduro%123"
@@ -78,7 +81,10 @@ enduro_minio_pipelines: []
 
 # tctl variables
 tctl_version: "1.18.0"
-tctl_binary_install_dir: "/usr/local/bin" 
+tctl_binary_install_dir: "/usr/local/bin"
+
+tctl_install_rpm: False
+tctl_rpm_url: "https://packages.archivematica.org/1.15.x/rocky9-extras/tctl-1.18.0-1.el9.x86_64.rpm"
 
 # Temporal internal variables
 temporal_version: "1.21.1"
@@ -107,6 +113,9 @@ temporal_service_worker_membership_port: "6939"
 
 temporal_archival_history_state: "enabled"
 temporal_archival_history_URI: "file:///tmp/temporal_archival/development"
+
+temporal_install_rpm: False
+temporal_rpm_url: "https://packages.archivematica.org/1.15.x/rocky9-extras/temporal-1.22.0-1.el9.x86_64.rpm"
 
 # Temporal database
 temporal_db_user: "temporal"

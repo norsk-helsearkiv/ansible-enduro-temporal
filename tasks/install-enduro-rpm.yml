@@ -1,0 +1,24 @@
+---
+
+- name: Create the enduro group
+  group:
+    name: "{{ enduro_system_group }}"
+    state: present
+    system: true
+  when: enduro_create_system_user|bool
+
+- name: Create the enduro user
+  user:
+    name: "{{ enduro_system_user }}"
+    groups: "{{ enduro_system_group }}"
+    append: true
+    shell: /usr/sbin/nologin
+    system: true
+    createhome: true
+    home: /var/lib/enduro
+  when: enduro_create_system_user|bool
+
+- name: Install enduro package
+  yum:
+    name: "{{ enduro_rpm_url }}"
+    state: present

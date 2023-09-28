@@ -26,27 +26,44 @@
     - temporal_run
 
 - import_tasks: preflight-enduro.yml
+  when: not enduro_install_rpm|bool
   tags:
     - enduro_install
     - enduro_configure
     - enduro_run
 
 - import_tasks: preflight-temporal.yml
+  when: not temporal_install_rpm|bool
   tags:
     - temporal_install
     - temporal_configure
     - temporal_run
 
 - import_tasks: preflight-tctl.yml
+  when: not tctl_install_rpm|bool
   tags:
     - tctl_install
 
 - import_tasks: install-temporal.yml
+  when: not temporal_install_rpm|bool
   become: true
   tags:
     - temporal_install
 
 - import_tasks: install-tctl.yml
+  when: not tctl_install_rpm|bool
+  become: true
+  tags:
+    - tctl_install
+
+- import_tasks: install-temporal-rpm.yml
+  when: temporal_install_rpm|bool
+  become: true
+  tags:
+    - temporal_install
+
+- import_tasks: install-tctl-rpm.yml
+  when: tctl_install_rpm|bool
   become: true
   tags:
     - tctl_install
@@ -57,6 +74,13 @@
     - temporal_configure
 
 - import_tasks: install-enduro.yml
+  when: not enduro_install_rpm|bool
+  become: true
+  tags:
+    - enduro_install
+
+- import_tasks: install-enduro-rpm.yml
+  when: enduro_install_rpm|bool
   become: true
   tags:
     - enduro_install

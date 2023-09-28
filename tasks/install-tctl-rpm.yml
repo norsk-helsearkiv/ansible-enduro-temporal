@@ -1,0 +1,5 @@
+---
+- name: Install tctl package
+  yum:
+    name: "{{ tctl_rpm_url }}"
+    state: present
