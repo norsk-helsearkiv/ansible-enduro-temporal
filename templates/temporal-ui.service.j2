@@ -1,0 +1,12 @@
+[Unit]
+Description=Temporal UI
+After={{ temporal_ui_systemd_after_services }}
+
+[Service]
+Type=simple
+Restart=on-failure
+User={{ temporal_ui_system_user }}
+ExecStart=/usr/bin/temporal-ui --root=/etc/temporal-ui --env={{ temporal_ui_env }} start
+
+[Install]
+WantedBy={{ temporal_systemd_wantedby_services }}

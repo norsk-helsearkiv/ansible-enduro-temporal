@@ -90,6 +90,18 @@
   tags:
     - enduro_configure
 
+- import_tasks: install-temporal-ui.yml
+  become: true
+  when: temporal_ui_install|bool
+  tags:
+    - temporal_ui_install
+
+- import_tasks: configure-temporal-ui.yml
+  become: true
+  when: temporal_ui_install|bool
+  tags:
+    - temporal_ui_configure
+
 - name: Ensure services are enabled on boot
   become: true
   systemd:

@@ -19,6 +19,8 @@ enduro_create_system_user: "true"
 
 enduro_install_rpm: False
 enduro_rpm_url: "https://packages.archivematica.org/1.15.x/rocky9-extras/enduro-0.41.1-1.el9.x86_64.rpm"
+enduro_rpm_gpg_check_enabled: True
+enduro_rpm_gpg_key: "https://packages.archivematica.org/GPG-KEY-archivematica-sha512"
 
 # Enduro database
 enduro_db_user: "enduro"
@@ -85,6 +87,8 @@ tctl_binary_install_dir: "/usr/local/bin"
 
 tctl_install_rpm: False
 tctl_rpm_url: "https://packages.archivematica.org/1.15.x/rocky9-extras/tctl-1.18.0-1.el9.x86_64.rpm"
+tctl_rpm_gpg_check_enabled: True
+tctl_rpm_gpg_key: "{{ enduro_rpm_gpg_key }}"
 
 # Temporal internal variables
 temporal_version: "1.21.1"
@@ -116,6 +120,8 @@ temporal_archival_history_URI: "file:///tmp/temporal_archival/development"
 
 temporal_install_rpm: False
 temporal_rpm_url: "https://packages.archivematica.org/1.15.x/rocky9-extras/temporal-1.22.0-1.el9.x86_64.rpm"
+temporal_rpm_gpg_check_enabled: True
+temporal_rpm_gpg_key: "{{ enduro_rpm_gpg_key }}"
 
 # Temporal database
 temporal_db_user: "temporal"
@@ -130,3 +136,21 @@ temporal_visibility_db_pass: "visibility123P$"
 temporal_visibility_db_host: "localhost"
 temporal_visibility_db_name: "visibility"
 temporal_visibility_db_port: "3306"
+
+# Temporal ui
+temporal_ui_install: True
+
+temporal_ui_env: "{{ temporal_env }}"
+temporal_ui_systemd_after_services: "network.target temporal.service"
+temporal_ui_system_user: "{{ temporal_system_user }}"
+
+temporal_ui_host: "localhost"
+temporal_ui_port: 8080
+
+temporal_ui_rpm_url: "https://packages.archivematica.org/1.15.x/rocky9-extras/temporal-ui-server-2.20.0-1.el9.x86_64.rpm"
+temporal_ui_rpm_gpg_check_enabled: True
+temporal_ui_rpm_gpg_key: "https://packages.archivematica.org/GPG-KEY-archivematica-sha512"
+
+
+temporal_ui_deb_url: "https://packages.archivematica.org/1.15.x/ubuntu-externals/pool/main/t/temporal-ui/temporal-ui_2.20.0-1~focal_amd64.deb"
+#temporal_ui_deb_url: "https://packages.archivematica.org/1.15.x/ubuntu-externals/pool/main/t/temporal-ui/temporal-ui_2.20.0-1~jammy_amd64.deb"

@@ -1,0 +1,23 @@
+---
+- name: "Install temporal-ui package (Debian)"
+  apt:
+    deb: "{{ temporal_ui_deb_url }}"
+    state: present
+  when:
+    - ansible_os_family == "Debian"
+
+- name: "Add GPG key for rpm repo (RedHat)"
+  rpm_key:
+    key: "{{ temporal_ui_rpm_gpg_key }}"
+    state: present
+  when:
+    - ansible_os_family in ['RedHat', 'Rocky']
+    - temporal_ui_rpm_gpg_check_enabled|bool
+
+- name: "Install temporal-ui package (RedHat)"
+  yum:
+    name: "{{ temporal_ui_rpm_url }}"
+    state: present
+    disable_gpg_check: "{{ not temporal_ui_rpm_gpg_check_enabled|bool }}"
+  when:
+    - ansible_os_family in ['RedHat', 'Rocky']

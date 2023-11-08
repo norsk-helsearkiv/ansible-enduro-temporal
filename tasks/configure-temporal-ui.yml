@@ -1,0 +1,39 @@
+---
+- name: Copy the Temporal UI systemd service file
+  template:
+    src: "{{ item }}"
+    dest: /etc/systemd/system/temporal-ui.service
+    owner: root
+    group: root
+    mode: 0644
+  with_first_found:
+    - templates/{{ inventory_hostname }}/temporal-ui.service.j2
+    - templates/temporal-ui.service.j2
+
+- name: "Create Temporal UI config directory"
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+  loop:
+    - "/etc/temporal-ui"
+    - "/etc/temporal-ui/config"
+  check_mode: false
+
+- name: Copy the Temporal UI config file
+  template:
+    src: "{{ item }}"
+    dest: /etc/temporal-ui/config/{{ temporal_ui_env }}.yaml
+    owner: root
+    group: root
+    mode: 0644
+  with_first_found:
+    - templates/{{ inventory_hostname }}/temporal-ui.yaml.j2
+    - templates/temporal-ui.yaml.j2
+
+- name: Start Temporal UI service to register namespace
+  systemd:
+    daemon_reload: true
+    name: "temporal-ui"
+    state: "restarted"
