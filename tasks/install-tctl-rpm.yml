@@ -1,5 +1,14 @@
 ---
+
+- name: "Add GPG key for rpm repo (RedHat)"
+  rpm_key:
+    key: "{{ tctl_rpm_gpg_key }}"
+    state: present
+  when:
+    - tctl_rpm_gpg_check_enabled|bool
+
 - name: Install tctl package
   yum:
     name: "{{ tctl_rpm_url }}"
     state: present
+    disable_gpg_check: "{{ not tctl_rpm_gpg_check_enabled|bool }}"

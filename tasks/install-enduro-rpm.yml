@@ -18,7 +18,15 @@
     home: /var/lib/enduro
   when: enduro_create_system_user|bool
 
+- name: "Add GPG key for rpm repo (RedHat)"
+  rpm_key:
+    key: "{{ enduro_rpm_gpg_key }}"
+    state: present
+  when:
+    - enduro_rpm_gpg_check_enabled|bool
+
 - name: Install enduro package
   yum:
     name: "{{ enduro_rpm_url }}"
     state: present
+    disable_gpg_check: "{{ not enduro_rpm_gpg_check_enabled|bool }}"

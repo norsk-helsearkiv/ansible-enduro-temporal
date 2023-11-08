@@ -15,7 +15,15 @@
     createhome: true
     home: /var/lib/temporal
 
+- name: "Add GPG key for rpm repo (RedHat)"
+  rpm_key:
+    key: "{{ temporal_rpm_gpg_key }}"
+    state: present
+  when:
+    - temporal_rpm_gpg_check_enabled|bool
+
 - name: Install temporal package
   yum:
     name: "{{ temporal_rpm_url }}"
     state: present
+    disable_gpg_check: "{{ not temporal_rpm_gpg_check_enabled|bool }}"
