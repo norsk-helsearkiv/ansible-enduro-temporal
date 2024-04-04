@@ -81,16 +81,15 @@ transferDeadline = "{{ pipeline.transferDeadline }}"
 {% endif %}
 
 [[hooks."hari"]]
-mock = true
-disabled = true
-#baseURL = "" # E.g.: "https://192.168.1.50:8080/api"
-baseURL = "http://tr-pvl-hari-001/api"
+mock = "{{ hooks_hari_mock }}"
+disabled = "{{ hooks_hari_disabled }}"
+baseURL = "{{ hooks_hari_baseURL }}"
 
 
 [[hooks."prod"]]
-receiptPath = "/staging/storage-receipts"
-disabled = true
+receiptPath = "{{ hooks_prod_receiptPath }}"
+disabled = "{{ hooks_prod_disabled }}"
 
 [validation]
-checksumsCheckEnabled = false
+checksumsCheckEnabled = "{{ validation_checksumsCheckEnabled }}"
 

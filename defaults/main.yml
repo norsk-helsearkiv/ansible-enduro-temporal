@@ -22,6 +22,14 @@ enduro_rpm_url: "https://packages.archivematica.org/1.15.x/rocky9-extras/enduro-
 enduro_rpm_gpg_check_enabled: True
 enduro_rpm_gpg_key: "https://packages.archivematica.org/GPG-KEY-archivematica-sha512"
 
+# NHA added
+hooks_hari_mock: true
+hooks_hari_disabled: true
+hooks_hari_baseURL: "" # E.g.: "https://192.168.1.50:8080/api"
+hooks_prod_receiptPath: "/staging/storage-receipts"
+hooks_prod_disabled: true
+validation_checksumsCheckEnabled: false
+
 # Enduro database
 enduro_db_user: "enduro"
 enduro_db_pass: "enduro%123"
