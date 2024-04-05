@@ -24,10 +24,10 @@ pipeline = "{{ watcher.pipeline }}"
 {% else %}
 pipeline = {{ watcher.pipeline | to_json }}
 {% endif %}
-stripTopLevelDir = watcher.stripTopLevelDir
-retentionPeriod = watcher.retentionPeriod
-rejectDuplicates = watcher.rejectDuplicates
-ignore = watcher.ignore
+stripTopLevelDir = "{{ watcher.stripTopLevelDir }}"
+retentionPeriod = "{{ watcher.retentionPeriod }}"
+rejectDuplicates = "{{ watcher.rejectDuplicates }}"
+ignore = "{{ watcher.ignore }}"
 
 {% endfor %}
 {% endif %}
