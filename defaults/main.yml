@@ -40,6 +40,18 @@ enduro_db_port: "3306"
 # Enduro watchers, NHA update to attach multiple pipelines to a single watcher
 enduro_filesystem_watchers: []
 
+#enduro_filesystem_watchers:
+#  - name: "watched-pipelines"
+#    path: "/var/archivematica/watched"
+#    inotify: "false"
+#    pipeline:
+#      - "pipeline1"
+#      - "pipeline2"
+#    stripTopLevelDir: "false"
+#    retentionPeriod: "0s"
+#    ignore: "(^.gitkeep)|(^*.mft)$"
+#    rejectDuplicates: "false"
+
 # Enduro pipelines
 enduro_filesystem_pipelines: []
 
