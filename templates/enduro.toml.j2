@@ -19,7 +19,11 @@ dsn = "{{ enduro_db_user }}:{{ enduro_db_pass }}@tcp({{ enduro_db_host }}:{{ en
 name = "{{ watcher.name }}"
 path = "{{ watcher.path }}"
 inotify = "{{ watcher.inotify }}"
+{% if watcher.pipeline is string %}
 pipeline = "{{ watcher.pipeline }}"
+{% else %}
+pipeline = {{ watcher.pipeline | to_json }}
+{% endif %}
 stripTopLevelDir = watcher.stripTopLevelDir
 retentionPeriod = watcher.retentionPeriod
 rejectDuplicates = watcher.rejectDuplicates
