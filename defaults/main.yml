@@ -37,6 +37,9 @@ enduro_db_host: "localhost"
 enduro_db_name: "enduro"
 enduro_db_port: "3306"
 
+# Enduro watchers, NHA update to attach multiple pipelines to a single watcher
+enduro_filesystem_watchers: []
+
 # Enduro pipelines
 enduro_filesystem_pipelines: []
 

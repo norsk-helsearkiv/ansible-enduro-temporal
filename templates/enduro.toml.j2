@@ -13,18 +13,23 @@ debug = "{{ enduro_api_debug_enabled }}"
 [database]
 dsn = "{{ enduro_db_user }}:{{ enduro_db_pass }}@tcp({{ enduro_db_host }}:{{ enduro_db_port | int }})/{{ enduro_db_name }}"
 
+{% if enduro_filesystem_watchers|length > 0 %}
+{% for watcher in enduro_filesystem_watchers %}
+[[watcher.filesystem]]
+name = "{{ watcher.name }}"
+path = "{{ watcher.path }}"
+inotify = "{{ watcher.inotify }}"
+pipeline = "{{ watcher.pipeline }}"
+stripTopLevelDir = watcher.stripTopLevelDir
+retentionPeriod = watcher.retentionPeriod
+rejectDuplicates = watcher.rejectDuplicates
+ignore = watcher.ignore
+
+{% endfor %}
+{% endif %}
+
 {% if enduro_filesystem_pipelines|length > 0 %}
 {% for pipeline in enduro_filesystem_pipelines %}
-[[watcher.filesystem]]
-name = "{{ pipeline.watched_name }}"
-path = "{{ pipeline.watched_path }}"
-inotify = "{{ pipeline.watched_inotify }}"
-pipeline = "{{ pipeline.name }}"
-stripTopLevelDir = "{{ pipeline.watched_stripTopLevelDir }}"
-retentionPeriod = "{{ pipeline.watched_retentionPeriod }}"
-rejectDuplicates = "{{ pipeline.watched_rejectDuplicates | default('false') }}"
-ignore = "{{ pipeline.watched_ignore | default('(^\.gitkeep)|(^*\.mft)$') }}"
-
 [[pipeline]]
 name = "{{ pipeline.name }}"
 baseURL = "{{ pipeline.baseURL }}"
