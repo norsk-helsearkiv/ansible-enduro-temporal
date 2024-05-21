@@ -5,7 +5,7 @@ log:
 persistence:
   defaultStore: mysql-default
   visibilityStore: mysql-visibility
-  numHistoryShards: "{{ temporal_num_history_shards }}"
+  numHistoryShards: {{ temporal_num_history_shards }}
   datastores:
     mysql-default:
       sql:
