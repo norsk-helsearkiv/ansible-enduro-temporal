@@ -1,5 +1,5 @@
 verbosity = "{{ enduro_debug_verbosity }}"
-debug = "{{  enduro_debug_enabled }}"
+debug = {{  enduro_debug_enabled }}
 debugListen = "{{ enduro_listen_debug_address }}"
 
 [temporal]
@@ -8,7 +8,7 @@ address = "{{ enduro_listen_temporal_address }}"
 
 [api]
 listen = "{{ enduro_listen_api_address }}"
-debug = "{{ enduro_api_debug_enabled }}"
+debug = {{ enduro_api_debug_enabled }}
 
 [database]
 dsn = "{{ enduro_db_user }}:{{ enduro_db_pass }}@tcp({{ enduro_db_host }}:{{ enduro_db_port | int }})/{{ enduro_db_name }}"
@@ -28,6 +28,9 @@ stripTopLevelDir = "{{ watcher.stripTopLevelDir }}"
 retentionPeriod = "{{ watcher.retentionPeriod }}"
 rejectDuplicates = "{{ watcher.rejectDuplicates }}"
 ignore = "{{ watcher.ignore }}"
+excludeHiddenFiles = {{ watcher.excludeHiddenFiles }}
+transferType = "{{ watcher.transferType }}"
+
 
 {% endfor %}
 {% endif %}
@@ -46,9 +49,10 @@ processingConfig = "{{ pipeline.processing_config }}"
 transferLocationID = "{{ pipeline.transferLocationID }}"
 {% endif %}
 storageServiceURL = "{{ pipeline.storageServiceURL }}"
-capacity = "{{ pipeline.capacity }}"
+capacity = {{ pipeline.capacity }}
 retryDeadline = "{{ pipeline.retryDeadline }}"
 transferDeadline = "{{ pipeline.transferDeadline }}"
+unbag = {{ pipeline.unbag }}
 
 {% endfor %}
 {% endif %}
@@ -90,25 +94,25 @@ transferDeadline = "{{ pipeline.transferDeadline }}"
 {% endif %}
 
 [[hooks."hari"]]
-mock = "{{ hooks_hari_mock }}"
-disabled = "{{ hooks_hari_disabled }}"
+mock = {{ hooks_hari_mock }}
+disabled = {{ hooks_hari_disabled }}
 baseURL = "{{ hooks_hari_baseURL }}"
 
 
 [[hooks."prod"]]
 receiptPath = "{{ hooks_prod_receiptPath }}"
-disabled = "{{ hooks_prod_disabled }}"
+disabled = {{ hooks_prod_disabled }}
 
 [validation]
-checksumsCheckEnabled = "{{ validation_checksumsCheckEnabled }}"
+checksumsCheckEnabled = {{ validation_checksumsCheckEnabled }}
 
 [metadata]
-processNameMetadata = "{{ metadata_processNameMetadata }}"
+processNameMetadata = {{ metadata_processNameMetadata }}
 
 [worker]
 heartbeatThrottleInterval =  "{{ worker_heartbeatThrottleInterval }}"
-maxConcurrentWorkflowsExecutionsSize = "{{ worker_maxConcurrentWorkflowsExecutionsSize }}"
-maxConcurrentSessionExecutionSize = "{{ worker_maxConcurrentSessionExecutionSize }}"
+maxConcurrentWorkflowsExecutionsSize = {{ worker_maxConcurrentWorkflowsExecutionsSize }}
+maxConcurrentSessionExecutionSize = {{ worker_maxConcurrentSessionExecutionSize }}
 
 [workflow]
 activityHeartbeatTimeout = "{{ workflow_activityHeartbeatTimeout }}"
