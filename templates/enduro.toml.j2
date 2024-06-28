@@ -102,3 +102,14 @@ disabled = "{{ hooks_prod_disabled }}"
 [validation]
 checksumsCheckEnabled = "{{ validation_checksumsCheckEnabled }}"
 
+[metadata]
+processNameMetadata = "{{ metadata_processNameMetadata }}"
+
+[worker]
+heartbeatThrottleInterval =  "{{ worker_heartbeatThrottleInterval }}"
+maxConcurrentWorkflowsExecutionsSize = "{{ worker_maxConcurrentWorkflowsExecutionsSize }}"
+maxConcurrentSessionExecutionSize = "{{ worker_maxConcurrentSessionExecutionSize }}"
+
+[workflow]
+activityHeartbeatTimeout = "{{ workflow_activityHeartbeatTimeout }}"
+
