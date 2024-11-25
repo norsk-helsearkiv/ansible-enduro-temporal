@@ -87,11 +87,15 @@ dcRedirectionPolicy:
 archival:
   history:
     state: "{{ temporal_archival_history_state }}"
+    {% if temporal_archival_history_state %}
     enableRead: true
     provider:
       filestore:
         fileMode: "0666"
         dirMode: "0766"
+    {% else %}
+    enableRead: true
+    {% endif %}
   visibility:
     state: "disabled"
     enableRead: false
@@ -100,6 +104,8 @@ namespaceDefaults:
   archival:
     history:
       state: "{{ temporal_archival_history_state }}"
+      {% if temporal_archival_history_state %}
       URI: "{{ temporal_archival_history_URI }}"
+      {% endif %}
     visibility:
       state: "disabled"
