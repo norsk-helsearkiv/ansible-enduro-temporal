@@ -26,8 +26,8 @@ persistence:
         connectProtocol: "tcp"
         user: "{{ temporal_visibility_db_user }}"
         password: "{{ temporal_visibility_db_pass }}"
-        maxConns: 2
-        maxIdleConns: 2
+        maxConns: 20
+        maxIdleConns: 20
         maxConnLifetime: "1h"
 
 global:
